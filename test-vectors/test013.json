@@ -1,0 +1,10 @@
+{
+  "$schema": "./schema.json",
+  "label": "array nested",
+  "input": [["foo"]],
+  "expected": {
+    "": [],
+    "/0": [],
+    "/0/0": "foo"
+  }
+}

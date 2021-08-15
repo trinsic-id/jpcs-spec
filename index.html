@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>JSON Data Flattening using JSON Pointer</title>
+<title>JavaScript Object Notation (JSON) Flattening w/ JSON Pointer Keys</title>
 <meta content="Tomislav Markovski" name="author">
 <meta content="
        This document describes a transformation algorithm where a JSON Value   is represented as flattened,
-single depth JSON object using JSON Pointer   as key values. Flattened objects have no data loss and can be unflattened
+single depth JSON object using JSON Pointer   as key value. Flattened objects have no data loss and can be unflattened
 to obtain the original JSON value. 
     " name="description">
 <meta content="xml2rfc 2.40.1" name="generator">
@@ -1069,7 +1069,7 @@ tr:nth-child(2n+1) > td {
 <table class="ears">
 <thead><tr>
 <td class="left"></td>
-<td class="center">JSON Data Flattening using JSON Pointer</td>
+<td class="center">JSON Flattening w/ JSON Pointer Keys</td>
 <td class="right">August 2021</td>
 </tr></thead>
 <tfoot><tr>
@@ -1087,7 +1087,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">draft-json-ptr-flat-00</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-08-13" class="published">13 August 2021</time>
+<time datetime="2021-08-15" class="published">15 August 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1100,11 +1100,11 @@ tr:nth-child(2n+1) > td {
 </dd>
 </dl>
 </div>
-<h1 id="title">JSON Data Flattening using JSON Pointer</h1>
+<h1 id="title">JavaScript Object Notation (JSON) Flattening w/ JSON Pointer Keys</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document describes a transformation algorithm where a JSON Value <span>[<a href="#RFC7159" class="xref">RFC7159</a>]</span> is represented as flattened,
-single depth JSON object using JSON Pointer <span>[<a href="#RFC6901" class="xref">RFC6901</a>]</span> as key values. Flattened objects have no data loss and can be unflattened
+single depth JSON object using JSON Pointer <span>[<a href="#RFC6901" class="xref">RFC6901</a>]</span> as key value. Flattened objects have no data loss and can be unflattened
 to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <div id="toc">
@@ -1118,25 +1118,18 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-flattening-algorithm" class="xref">Flattening Algorithm</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-toc.1-1.2.2.1">
-                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-examples" class="xref">Examples</a><a href="#section-toc.1-1.2.2.1.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-toc.1-1.2.2.1.2.1">
-                    <p id="section-toc.1-1.2.2.1.2.1.1"><a href="#section-2.1.1" class="xref">2.1.1</a>.  <a href="#name-example-array" class="xref">Example array</a><a href="#section-toc.1-1.2.2.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-</ul>
-</li>
-</ul>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-unflattening-algorithm" class="xref">Unflattening Algorithm</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-test-vectors" class="xref">Test Vectors</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
 </ul>
 </nav>
@@ -1147,7 +1140,8 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">TODO<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">Object flattening can be defined as converting a nested data layer object into a new object with one layer of key/value pairs. We call the result flattened object, or flattened map. Any valid JSON value, as defined in <span>[<a href="#RFC7159" class="xref">RFC7159</a>]</span> Section 3, can be represented as flattened object. Semantically, flattened objects contain the same information as their original JSON value and can be determinisitically converted between both formats.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">JSON Pointer flattening is useful in different scenarios, such as nested data search, data indexing, object comparison, attribute-based signatures, etc.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="flattening-algorithm">
@@ -1155,52 +1149,28 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
       <h2 id="name-flattening-algorithm">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-flattening-algorithm" class="section-name selfRef">Flattening Algorithm</a>
       </h2>
-<p id="section-2-1">TODO<a href="#section-2-1" class="pilcrow">¶</a></p>
-<div id="examples">
-<section id="section-2.1">
-        <h3 id="name-examples">
-<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
-        </h3>
-<p id="section-2.1-1">The object:<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-2.1-2">
+<p id="section-2-1">Flattened JSON value is represented as a JSON object with a single level children entries. Each node in the original object, including root node, is represented with a single entry in the flattened map. The key of the flattened entry is the JSON pointer of the node in the original object, while the value is the value of the original node, with an exception for arrays and objects. If the node in the original object is of type <code>"array"</code> or <code>"object"</code>, the value of the entry in the flattened map is empty array <code>[]</code> or empty object <code>{}</code> respectively.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">For example, this input JSON object:<a href="#section-2-2" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-2-3">
 <pre>{
-    "foo": "bar"
+    "hello": "world",
+    "foo": { "bar": "baz" },
+    "knows": [ 42, null ]
 }
-</pre><a href="#section-2.1-2" class="pilcrow">¶</a>
+</pre><a href="#section-2-3" class="pilcrow">¶</a>
 </div>
-<p id="section-2.1-3">Will be flattened as:<a href="#section-2.1-3" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-2.1-4">
+<p id="section-2-4">Can be flattened into:<a href="#section-2-4" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-2-5">
 <pre>{
-    "": {},
-    "/foo": "bar"
+  "": {},
+  "/hello": "world",
+  "/foo": {},
+  "/foo/bar": "baz",
+  "/knows": [],
+  "/knows/0": 42,
+  "/knows/1": null
 }
-</pre><a href="#section-2.1-4" class="pilcrow">¶</a>
-</div>
-<div id="example-array">
-<section id="section-2.1.1">
-          <h4 id="name-example-array">
-<a href="#section-2.1.1" class="section-number selfRef">2.1.1. </a><a href="#name-example-array" class="section-name selfRef">Example array</a>
-          </h4>
-<p id="section-2.1.1-1">An array with values of different types:<a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-2.1.1-2">
-<pre>[
-    "foo", "bar", true
-]
-</pre><a href="#section-2.1.1-2" class="pilcrow">¶</a>
-</div>
-<p id="section-2.1.1-3">Will be flattened as:<a href="#section-2.1.1-3" class="pilcrow">¶</a></p>
-<div id="section-2.1.1-4">
-<pre class="sourcecode lang-json">{
-    "": [],
-    "/0": "foo",
-    "/1": "bar",
-    "/2": true
-}
-</pre><a href="#section-2.1.1-4" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-</section>
+</pre><a href="#section-2-5" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1212,17 +1182,25 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
 <p id="section-3-1">TODO<a href="#section-3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="test-vectors">
 <section id="section-4">
+      <h2 id="name-test-vectors">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
+      </h2>
+<p id="section-4-1">Implementations should use the provided test vectors to run conformance tests against this specification.<a href="#section-4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-5">
       <h2 id="name-normative-references">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
-<dt id="RFC6901">[RFC6901]</dt>
-<dd>
-<span class="refAuthor">Bryan, P., Ed.</span><span class="refAuthor">, Zyp, K.</span><span class="refAuthor">, and M. Nottingham, Ed.</span>, <span class="refTitle">"JavaScript Object Notation (JSON) Pointer"</span>, <span class="seriesInfo">RFC 6901</span>, <span class="seriesInfo">DOI 10.17487/RFC6901</span>, <time datetime="2013-04">April 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6901">https://www.rfc-editor.org/info/rfc6901</a>&gt;</span>. </dd>
 <dt id="RFC7159">[RFC7159]</dt>
 <dd>
 <span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">RFC 7159</span>, <span class="seriesInfo">DOI 10.17487/RFC7159</span>, <time datetime="2014-03">March 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7159">https://www.rfc-editor.org/info/rfc7159</a>&gt;</span>. </dd>
+<dt id="RFC6901">[RFC6901]</dt>
+<dd>
+<span class="refAuthor">Bryan, P., Ed.</span><span class="refAuthor">, Zyp, K.</span><span class="refAuthor">, and M. Nottingham, Ed.</span>, <span class="refTitle">"JavaScript Object Notation (JSON) Pointer"</span>, <span class="seriesInfo">RFC 6901</span>, <span class="seriesInfo">DOI 10.17487/RFC6901</span>, <time datetime="2013-04">April 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6901">https://www.rfc-editor.org/info/rfc6901</a>&gt;</span>. </dd>
 </dl>
 </section>
 <div id="authors-addresses">
