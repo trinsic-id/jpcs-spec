@@ -1,6 +1,6 @@
 %%%
-title = "JavaScript Object Notation (JSON) Flattening w/ JSON Pointer Keys"
-abbrev = "JSON Flattening w/ JSON Pointer Keys"
+title = "JavaScript Object Notation (JSON) Normalization"
+abbrev = "JavaScript Object Notation (JSON) Normalization"
 ipr= "none"
 area = "Internet"
 workgroup = "none"
@@ -24,21 +24,21 @@ organization = "Trinsic"
 
 .# Abstract
 
-This document describes a transformation algorithm where a JSON Value [@!RFC7159] is represented as flattened,
-single depth JSON object using JSON Pointer [@!RFC6901] as key value. Flattened objects have no data loss and can be unflattened
+This document describes a normalization algorithm where a JSON Value [@!RFC7159] is represented as flattened,
+single depth JSON object using JSON Pointer [@!RFC6901] as key value. Normalized objects have no data loss and can be denormalized
 to obtain the original JSON value.
 
 {mainmatter}
 
 # Introduction
 
-Object flattening can be defined as converting a nested data layer object into a new object with one layer of key/value pairs. We call the result flattened object, or flattened map. Any valid JSON value, as defined in [@!RFC7159] Section 3, can be represented as flattened object. Semantically, flattened objects contain the same information as their original JSON value and can be determinisitically converted between both formats.
+Object normalization can be defined as converting a nested data layer object into a new object with one layer of key/value pairs. We call the result normalized object, or normalized map. Any valid JSON value, as defined in [@!RFC7159] Section 3, can be represented in normalized form. Semantically, normalized objects contain the same information as their original JSON value and can be determinisitically converted between both formats.
 
-JSON Pointer flattening is useful in different scenarios, such as nested data search, data indexing, object comparison, attribute-based signatures, etc.
+JSON Pointer normalization is useful in different scenarios, such as nested data search, data indexing, object comparison, attribute-based signatures, etc.
 
-# Flattening Algorithm
+# Normalization Algorithm
 
-Flattened JSON value is represented as a JSON object with a single level children entries. Each node in the original object, including root node, is represented with a single entry in the flattened map. The key of the flattened entry is the JSON pointer of the node in the original object, while the value is the value of the original node, with an exception for arrays and objects. If the node in the original object is of type `"array"` or `"object"`, the value of the entry in the flattened map is empty array `[]` or empty object `{}` respectively.
+Normalized JSON value is represented as a JSON object with a single level children entries. Each node in the original object, including root node, is represented with a single entry in the normalized map. The key of the normalized entry is the JSON pointer of the node in the original object, while the value is the value of the original node, with an exception for arrays and objects. If the node in the original object is of type `"array"` or `"object"`, the value of the entry in the normalized map is empty array `[]` or empty object `{}` respectively.
 
 For example, this input JSON object:
 
@@ -50,7 +50,7 @@ For example, this input JSON object:
 }
 ```
 
-Can be flattened into:
+Can be normalized into:
 
 ```
 {
@@ -63,10 +63,6 @@ Can be flattened into:
   "/knows/1": null
 }
 ```
-
-# Unflattening Algorithm
-
-TODO
 
 # Test Vectors
 
