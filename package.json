@@ -1,0 +1,20 @@
+{
+  "name": "json-ptr-n11n-spec",
+  "version": "1.0.0",
+  "description": "Specification for JSON Pointer Normalization scheme",
+  "scripts": {
+    "build": "npm run build:markdown2rfc && npm run rename",
+    "build:markdown2rfc": "docker run -v `pwd`:/data danielfett/markdown2rfc spec.md",
+    "rename": "mv draft-json-ptr-n11n-00.html index.html && rm draft-json-ptr-n11n-00.xml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trinsic-id/json-ptr-n11n-spec.git"
+  },
+  "author": "Tomislav Markovski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trinsic-id/json-ptr-n11n-spec/issues"
+  },
+  "homepage": "https://github.com/trinsic-id/json-ptr-n11n-spec#readme"
+}

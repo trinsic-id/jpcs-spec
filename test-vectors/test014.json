@@ -1,0 +1,28 @@
+{
+  "$schema": "./schema.json",
+  "label": "complex object",
+  "input": {
+    "foo": {
+      "name": "bar",
+      "is": [42, 13, true],
+      "has": true
+    },
+    "knows": ["this", [{ "also": "that", "if": null }]]
+  },
+  "expected": {
+    "": {},
+    "/foo": {},
+    "/foo/name": "bar",
+    "/foo/is": [],
+    "/foo/is/0": 42,
+    "/foo/is/1": 13,
+    "/foo/is/2": true,
+    "/foo/has": true,
+    "/knows": [],
+    "/knows/0": "this",
+    "/knows/1": [],
+    "/knows/1/0": {},
+    "/knows/1/0/also": "that",
+    "/knows/1/0/if": null
+  }
+}

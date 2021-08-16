@@ -1,0 +1,8 @@
+{
+  "$schema": "./schema.json",
+  "label": "string value",
+  "input": "foo",
+  "expected": {
+    "": "foo"
+  }
+}
