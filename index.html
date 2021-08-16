@@ -12,8 +12,11 @@ single depth JSON object using JSON Pointer   as key value. Normalized objects h
 to obtain the original JSON value. 
     " name="description">
 <meta content="xml2rfc 2.40.1" name="generator">
-<meta content="draft-json-flat-ptr-00" name="ietf.draft">
-<link href="./draft-json-flat-ptr-00.xml" rel="alternate" type="application/rfc+xml">
+<meta content="json" name="keyword">
+<meta content="normalization" name="keyword">
+<meta content="json-pointer" name="keyword">
+<meta content="draft-json-normalize-ptr-00" name="ietf.draft">
+<link href="./draft-json-normalize-ptr-00.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
 
@@ -1084,7 +1087,7 @@ tr:nth-child(2n+1) > td {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">none</dd>
 <dt class="label-individual-draft">Individual-Draft:</dt>
-<dd class="individual-draft">draft-json-flat-ptr-00</dd>
+<dd class="individual-draft">draft-json-normalize-ptr-00</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
 <time datetime="2021-08-16" class="published">16 August 2021</time>
@@ -1117,16 +1120,19 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
             <p id="section-toc.1-1.1.1"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-normalization-algorithm" class="xref">Normalization Algorithm</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions" class="xref">Conventions</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-test-vectors" class="xref">Test Vectors</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-normalization-algorithm" class="xref">Normalization Algorithm</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-test-vectors" class="xref">Test Vectors</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
 </ul>
 </nav>
@@ -1137,27 +1143,42 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">Object normalization can be defined as converting a nested data layer object into a new object with one layer of key/value pairs. We call the result normalized object, or normalized map. Any valid JSON value, as defined in <span>[<a href="#RFC7159" class="xref">RFC7159</a>]</span> Section 3, can be represented in normalized form. Semantically, normalized objects contain the same information as their original JSON value and can be determinisitically converted between both formats.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">JSON Pointer normalization is useful in different scenarios, such as nested data search, data indexing, object comparison, attribute-based signatures, etc.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-1">Object normalization can be defined as converting a nested data layer object into a new object with one layer of key/value pairs.
+We call the result normalized object, or normalized map. Any valid JSON value, as defined in <span>[<a href="#RFC7159" class="xref">RFC7159</a>]</span> Section 3,
+can be represented in normalized form. Semantically, normalized objects contain the same information as their original
+JSON value and can be determinisitically converted between both formats.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">JSON Pointer normalization is useful in different scenarios, such as nested data search, data indexing, object comparison,
+attribute-based signatures, etc.<a href="#section-1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions">
+<section id="section-2">
+      <h2 id="name-conventions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions" class="section-name selfRef">Conventions</a>
+      </h2>
+<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
+in this document are to be interpreted as described in <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span>.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="normalization-algorithm">
-<section id="section-2">
+<section id="section-3">
       <h2 id="name-normalization-algorithm">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-normalization-algorithm" class="section-name selfRef">Normalization Algorithm</a>
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-normalization-algorithm" class="section-name selfRef">Normalization Algorithm</a>
       </h2>
-<p id="section-2-1">Normalized JSON value is represented as a JSON object with a single level children entries. Each node in the original object, including root node, is represented with a single entry in the normalized map. The key of the normalized entry is the JSON pointer of the node in the original object, while the value is the value of the original node, with an exception for arrays and objects. If the node in the original object is of type <code>"array"</code> or <code>"object"</code>, the value of the entry in the normalized map is empty array <code>[]</code> or empty object <code>{}</code> respectively.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">For example, this input JSON object:<a href="#section-2-2" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-2-3">
+<p id="section-3-1">Normalized JSON value is represented as a JSON object with a single level key/value entries. All nodes in the original object, including the root node,
+MUST be represented with a single entry in the normalized map. The key of the normalized entry is the JSON pointer of the node in the original object. The value of the normalized entry is the value of the original node, with an exception for arrays and objects. If the node in the original object is of type <code>"array"</code> or <code>"object"</code>, the value of the entry
+in the normalized map is empty array <code>[]</code> or empty object <code>{}</code> respectively. The normalized object MUST NOT contain any additional entries or metadata.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">For example, the input JSON object:<a href="#section-3-2" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3-3">
 <pre>{
     "hello": "world",
     "foo": { "bar": "baz" },
     "knows": [ 42, null ]
 }
-</pre><a href="#section-2-3" class="pilcrow">¶</a>
+</pre><a href="#section-3-3" class="pilcrow">¶</a>
 </div>
-<p id="section-2-4">Can be normalized into:<a href="#section-2-4" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-2-5">
+<p id="section-3-4">Can be normalized into:<a href="#section-3-4" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3-5">
 <pre>{
   "": {},
   "/hello": "world",
@@ -1167,21 +1188,27 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
   "/knows/0": 42,
   "/knows/1": null
 }
-</pre><a href="#section-2-5" class="pilcrow">¶</a>
+</pre><a href="#section-3-5" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="test-vectors">
-<section id="section-3">
+<section id="section-4">
       <h2 id="name-test-vectors">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
       </h2>
-<p id="section-3-1">Implementations should use the provided test vectors to run conformance tests against this specification.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">Implementations SHOULD use the available test vectors to run conformance tests against this specification.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<dl class="dlParallel" id="section-4-2">
+        <dt id="section-4-2.1">Repository</dt>
+<dd id="section-4-2.2">
+          <p id="section-4-2.2.1"><a href="https://github.com/trinsic-id/json-normalize-ptr-spec">https://github.com/trinsic-id/json-normalize-ptr-spec</a><a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+</dl>
 </section>
 </div>
-<section id="section-4">
+<section id="section-5">
       <h2 id="name-normative-references">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
 <dt id="RFC7159">[RFC7159]</dt>
@@ -1190,6 +1217,9 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
 <dt id="RFC6901">[RFC6901]</dt>
 <dd>
 <span class="refAuthor">Bryan, P., Ed.</span><span class="refAuthor">, Zyp, K.</span><span class="refAuthor">, and M. Nottingham, Ed.</span>, <span class="refTitle">"JavaScript Object Notation (JSON) Pointer"</span>, <span class="seriesInfo">RFC 6901</span>, <span class="seriesInfo">DOI 10.17487/RFC6901</span>, <time datetime="2013-04">April 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6901">https://www.rfc-editor.org/info/rfc6901</a>&gt;</span>. </dd>
+<dt id="RFC2119">[RFC2119]</dt>
+<dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
 </dl>
 </section>
 <div id="authors-addresses">
