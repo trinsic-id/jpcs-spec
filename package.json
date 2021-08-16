@@ -5,16 +5,16 @@
   "scripts": {
     "build": "npm run build:markdown2rfc && npm run rename",
     "build:markdown2rfc": "docker run -v `pwd`:/data danielfett/markdown2rfc spec.md",
-    "rename": "mv draft-json-ptr-flat-00.html index.html && rm draft-json-ptr-flat-00.xml"
+    "rename": "mv draft-json-flat-ptr-00.html index.html && rm draft-json-flat-ptr-00.xml"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/trinsic-id/json-pointer-flattening-spec.git"
+    "url": "git+https://github.com/trinsic-id/json-flat-ptr-spec.git"
   },
   "author": "Tomislav Markovski",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/trinsic-id/json-pointer-flattening-spec/issues"
+    "url": "https://github.com/trinsic-id/json-flat-ptr-spec/issues"
   },
-  "homepage": "https://github.com/trinsic-id/json-pointer-flattening-spec#readme"
+  "homepage": "https://github.com/trinsic-id/json-flat-ptr-spec#readme"
 }

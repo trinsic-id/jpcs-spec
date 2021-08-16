@@ -9,7 +9,7 @@ keyword = [""]
 
 [seriesInfo]
 name = "Individual-Draft"
-value = "draft-json-ptr-flat-00"
+value = "draft-json-flat-ptr-00"
 status = "informational"
 
 [[author]]
