@@ -1,16 +1,20 @@
 %%%
 title = "JavaScript Object Notation (JSON) Pointer Normalization"
-abbrev = "JSON Pointer Normalization"
+abbrev = "jpn"
 ipr= "none"
 area = "Internet"
+category = "info"
 workgroup = "none"
-submissiontype = "IETF"
+submissiontype = "independent"
 keyword = ["json", "normalization", "json-pointer"]
 date = 2021-08-16
 
+[pi]
+toc = "yes"
+
 [seriesInfo]
-name = "Individual-Draft"
-value = "draft-json-ptr-n11n-00"
+name = "Internet-Draft"
+value = "draft-tmarkovski-json-ptr-n11n-latest"
 status = "informational"
 
 [[author]]
@@ -43,7 +47,7 @@ attribute-based signatures, etc.
 
 # Conventions
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
+The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY**, and **OPTIONAL**
 in this document are to be interpreted as described in [@!RFC2119].
 
 # Normalization Algorithm
@@ -54,13 +58,19 @@ Normalized JSON value is represented as a JSON object with a single level key/va
 The ABNF syntax of a normalized object is:
 
 ```abnf
-normalized-object =
-  begin-object
-  [ normalized-entry *( value-separator normalized-entry ) ]
-  end-object
-    ; some rule names are referenced in RFC7159
-normalized-entry  = json-pointer name-separator value
-    ; some rule names are referenced in RFC6901 and RFC7159
+normalized-object = begin-object
+                    [ normalized-value *( value-separator normalized-value ) ]
+                    end-object
+
+normalized-value  = json-pointer name-separator value
+
+value             = false / null / true / number / string / empty-object / empty-array
+
+empty-object      = begin-object end-object
+
+empty-array       = being-array end-array
+
+                        ; some rule names are described in RFC7159 and RFC6901
 ```
 
 ## Input Data Requirements
@@ -98,9 +108,9 @@ The input JSON object:
 
 ```
 {
-    "hello": "world",
-    "foo": { "bar": "baz" },
-    "knows": [ 42, null ]
+  "hello": "world",
+  "foo": { "bar": true },
+  "knows": [ 42, null ]
 }
 ```
 
@@ -111,7 +121,7 @@ Can be normalized into:
   "": {},
   "/hello": "world",
   "/foo": {},
-  "/foo/bar": "baz",
+  "/foo/bar": true,
   "/knows": [],
   "/knows/0": 42,
   "/knows/1": null
@@ -125,5 +135,62 @@ It is **RECOMMENDED** that implentations use the available test vectors to run c
 Repository
 : https://github.com/trinsic-id/json-ptr-n11n-spec
 
-
 {backmatter}
+
+# ECMAScript Sample Normalization
+
+Below is an example function of JSON normalization for usage with ECMAScript-based [@!ECMA-262] systems:
+
+~~~ js
+const normalize = function (data, pathSegments = [""], normalizedObject = {}) {
+  let currentPointer = pathSegments.join("");
+
+  if (data === null) {
+    Object.assign(normalizedObject, { [currentPointer]: data });
+  } else if (Array.isArray(data)) {
+    Object.assign(normalizedObject, { [currentPointer]: [] });
+    data.forEach((element, index) => {
+      pathSegments.push(`/${index}`);
+      normalize(element, pathSegments, normalizedObject);
+    });
+  } else
+    switch (typeof data) {
+      case "string":
+      case "number":
+      case "boolean":
+        Object.assign(normalizedObject, { [currentPointer]: data });
+        break;
+      case "object":
+        Object.assign(normalizedObject, { [currentPointer]: {} });
+        for (const [key, value] of Object.entries(data)) {
+          pathSegments.push(`/${escape(key)}`);
+          normalize(value, pathSegments, normalizedObject);
+        }
+        break;
+      default:
+        throw Error(`Invalid type: ${typeof data}`);
+    }
+
+  pathSegments.pop();
+  return normalizedObject;
+};
+
+const escape = function (item) {
+  return item.replace("~", "~0").replace("/", "~1");
+};
+~~~
+
+# Development Portal
+
+This specification is currently developed at https://github.com/trinsic-id/json-ptr-n11n-spec
+
+<reference anchor="ECMA-262" target="https://www.ecma-international.org/ecma-262/10.0/index.html">
+  <front>
+    <title>ECMAScript 2019 Language Specification</title>
+    <author>
+      <organization>ECMA International</organization>
+    </author>
+    <date year="2019" month="June"/>
+  </front>
+  <refcontent>Standard ECMA-262 10th Edition</refcontent>
+</reference>
