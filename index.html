@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>JavaScript Object Notation (JSON) Pointer Normalization</title>
+<title>JSON Pointer Canonicalization (JPC)</title>
 <meta content="Tomislav Markovski" name="author">
 <meta content="
-       This document describes a normalization algorithm where a JSON Value   is represented as flattened,
+       This document describes a JSON normalization algorithm where a JSON Value   is represented as flattened,
 single depth JSON object using JSON Pointer   as key value. Normalized objects have no data loss and can be denormalized
 to obtain the original JSON value. 
     " name="description">
 <meta content="xml2rfc 3.9.1" name="generator">
 <meta content="json" name="keyword">
-<meta content="normalization" name="keyword">
+<meta content="canonicalization" name="keyword">
 <meta content="json-pointer" name="keyword">
-<meta content="draft-tmarkovski-json-ptr-n11n-latest" name="ietf.draft">
+<meta content="draft-tmarkovski-jpc-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.9.1
     Python 3.9.2
@@ -34,7 +34,7 @@ to obtain the original JSON value.
     setuptools 52.0.0
     six 1.16.0
 -->
-<link href="./draft-tmarkovski-json-ptr-n11n-latest.xml" rel="alternate" type="application/rfc+xml">
+<link href="./draft-tmarkovski-jpc-latest.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
 
@@ -1181,7 +1181,7 @@ li > p:last-of-type {
 <table class="ears">
 <thead><tr>
 <td class="left"></td>
-<td class="center">jpn</td>
+<td class="center">jpc</td>
 <td class="right">August 2021</td>
 </tr></thead>
 <tfoot><tr>
@@ -1204,10 +1204,10 @@ li > p:last-of-type {
 </dd>
 </dl>
 </div>
-<h1 id="title">JavaScript Object Notation (JSON) Pointer Normalization</h1>
+<h1 id="title">JSON Pointer Canonicalization (JPC)</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document describes a normalization algorithm where a JSON Value <span>[<a href="#RFC7159" class="xref">RFC7159</a>]</span> is represented as flattened,
+<p id="section-abstract-1">This document describes a JSON normalization algorithm where a JSON Value <span>[<a href="#RFC7159" class="xref">RFC7159</a>]</span> is represented as flattened,
 single depth JSON object using JSON Pointer <span>[<a href="#RFC6901" class="xref">RFC6901</a>]</span> as key value. Normalized objects have no data loss and can be denormalized
 to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
@@ -1216,48 +1216,48 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="ulEmpty ulBare compact toc">
-<li class="ulEmpty ulBare compact toc" id="section-toc.1-1.1">
+<nav class="toc"><ul class="compact ulEmpty toc ulBare">
+<li class="compact ulEmpty toc ulBare" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
 </li>
-          <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.2">
+          <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions" class="xref">Conventions</a></p>
 </li>
-          <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-normalization-algorithm" class="xref">Normalization Algorithm</a></p>
-<ul class="ulBare ulEmpty compact toc">
-<li class="ulBare ulEmpty compact toc" id="section-toc.1-1.3.2.1">
+          <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-canonicalization-algorithm" class="xref">Canonicalization Algorithm</a></p>
+<ul class="compact ulEmpty toc ulBare">
+<li class="compact ulEmpty toc ulBare" id="section-toc.1-1.3.2.1">
                 <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-input-data-requirements" class="xref">Input Data Requirements</a></p>
 </li>
-              <li class="ulBare ulEmpty compact toc" id="section-toc.1-1.3.2.2">
+              <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-generation-of-normalized-da" class="xref">Generation of Normalized Data</a></p>
-<ul class="ulBare ulEmpty compact toc">
-<li class="ulBare ulEmpty compact toc" id="section-toc.1-1.3.2.2.2.1">
-                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="xref">3.2.1</a>.  <a href="#name-normalization-of-structured" class="xref">Normalization of Structured Data</a></p>
+<ul class="compact ulEmpty toc ulBare">
+<li class="compact ulEmpty toc ulBare" id="section-toc.1-1.3.2.2.2.1">
+                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="xref">3.2.1</a>.  <a href="#name-canonicalization-of-structu" class="xref">canonicalization of Structured Data</a></p>
 </li>
-                  <li class="ulBare ulEmpty compact toc" id="section-toc.1-1.3.2.2.2.2">
+                  <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.3.2.2.2.2">
                     <p id="section-toc.1-1.3.2.2.2.2.1"><a href="#section-3.2.2" class="xref">3.2.2</a>.  <a href="#name-normalizaton-of-primitive-t" class="xref">Normalizaton of Primitive Types</a></p>
 </li>
                 </ul>
 </li>
-              <li class="ulBare ulEmpty compact toc" id="section-toc.1-1.3.2.3">
+              <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-example" class="xref">Example</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4">
+          <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-conformance" class="xref">Conformance</a></p>
 </li>
-          <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5">
+          <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
 </li>
-          <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-ecmascript-sample-normaliza" class="xref">ECMAScript Sample Normalization</a></p>
+          <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-ecmascript-sample-canonical" class="xref">ECMAScript Sample canonicalization</a></p>
 </li>
-          <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.7">
+          <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-development-portal" class="xref">Development Portal</a></p>
 </li>
-          <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.8">
+          <li class="compact ulEmpty toc ulBare" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#appendix-C" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a></p>
 </li>
         </ul>
@@ -1269,12 +1269,12 @@ to obtain the original JSON value.<a href="#section-abstract-1" class="pilcrow">
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">Object normalization can be defined as converting a nested data layer object into a new object with one layer of key/value pairs.
-We call the result normalized object, or normalized map. Any valid JSON value, as defined in <span>[<a href="#RFC7159" class="xref">RFC7159</a>]</span> Section 3,
-can be represented in normalized form. Semantically, normalized objects contain the same information as their original
+<p id="section-1-1">Object canonicalization can be defined as converting a nested data layer object into a new object with one layer of key/value pairs.
+We call the result canonical object, or canonical map. Any valid JSON value, as defined in <span>[<a href="#RFC7159" class="xref">RFC7159</a>]</span> Section 3,
+can be represented in canonical form. Semantically, normalized objects contain the same information as their original
 JSON value and can be determinisitically converted between both formats.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">JSON Pointer normalization is useful in different scenarios, such as nested data search, data indexing, object comparison,
-attribute-based signatures, etc.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-2">JSON Pointer Canonicalization is useful in different scenarios, such as nested data search, data indexing, object comparison,
+aggregatable signatures, etc.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions">
@@ -1286,13 +1286,14 @@ attribute-based signatures, etc.<a href="#section-1-2" class="pilcrow">¶</a></p
 in this document are to be interpreted as described in <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span>.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="normalization-algorithm">
+<div id="canonicalization-algorithm">
 <section id="section-3">
-      <h2 id="name-normalization-algorithm">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-normalization-algorithm" class="section-name selfRef">Normalization Algorithm</a>
+      <h2 id="name-canonicalization-algorithm">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-canonicalization-algorithm" class="section-name selfRef">Canonicalization Algorithm</a>
       </h2>
-<p id="section-3-1">This section describes the details related to creating a normalized JSON representation.
-Normalized JSON value is represented as a JSON object with a single level key/value entries.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">This section describes the details related to creating a canonical JSON representation.
+Canonical objects are represented as a JSON object with a single level key/value entries.
+The key of each entry is the JSON Pointer of that entry in the original form.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The ABNF syntax of a normalized object is:<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="section-3-3">
 <pre class="sourcecode lang-abnf">normalized-object = begin-object
@@ -1339,15 +1340,15 @@ empty-array       = being-array end-array
 </li>
           <li class="normal" id="section-3.2-2.3">The key of the normalized entry <span class="bcp14">MUST</span> be the JSON pointer <span>[<a href="#RFC6901" class="xref">RFC6901</a>]</span> of the node in the original object<a href="#section-3.2-2.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.2-2.4">The value of the normalized entry <span class="bcp14">MUST</span> follow the normalization for each type as described in the sections below<a href="#section-3.2-2.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.2-2.4">The value of the normalized entry <span class="bcp14">MUST</span> follow the canonicalization for each type as described in the sections below<a href="#section-3.2-2.4" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-3.2-2.5">Normalized objects <span class="bcp14">MUST NOT</span> contain extra information or metadata<a href="#section-3.2-2.5" class="pilcrow">¶</a>
 </li>
         </ul>
-<div id="normalization-of-structured-data">
+<div id="canonicalization-of-structured-data">
 <section id="section-3.2.1">
-          <h4 id="name-normalization-of-structured">
-<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-normalization-of-structured" class="section-name selfRef">Normalization of Structured Data</a>
+          <h4 id="name-canonicalization-of-structu">
+<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-canonicalization-of-structu" class="section-name selfRef">canonicalization of Structured Data</a>
           </h4>
 <p id="section-3.2.1-1">Node elements of type "array" or "object" are normalized using their empty state.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1437,12 +1438,12 @@ empty-array       = being-array end-array
 <dd class="break"></dd>
 </dl>
 </section>
-<div id="ecmascript-sample-normalization">
+<div id="ecmascript-sample-canonicalization">
 <section id="appendix-A">
-      <h2 id="name-ecmascript-sample-normaliza">
-<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-ecmascript-sample-normaliza" class="section-name selfRef">ECMAScript Sample Normalization</a>
+      <h2 id="name-ecmascript-sample-canonical">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-ecmascript-sample-canonical" class="section-name selfRef">ECMAScript Sample canonicalization</a>
       </h2>
-<p id="appendix-A-1">Below is an example function of JSON normalization for usage with ECMAScript-based <span>[<a href="#ECMA-262" class="xref">ECMA-262</a>]</span> systems:<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">Below is an example function of JSON canonicalization for usage with ECMAScript-based <span>[<a href="#ECMA-262" class="xref">ECMA-262</a>]</span> systems:<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <div id="appendix-A-2">
 <pre class="sourcecode lang-js">const normalize = function (data, pathSegments = [""], normalizedObject = {}) {
   let currentPointer = pathSegments.join("");
