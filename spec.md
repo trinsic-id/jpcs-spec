@@ -82,7 +82,7 @@ The input JSON data **MUST** adhere to the rules:
 - Input **MUST NOT** contain `NaN` or `Infinity` literals
 - Input **MUST NOT** contain duplicate keys in any object element
 
-## Generation of Normalized Data
+## Generation of Canonical Data
 
 Normalized objects have the following properties:
 
@@ -92,7 +92,7 @@ Normalized objects have the following properties:
 - The value of the normalized entry **MUST** follow the canonicalization for each type as described in the sections below
 - Normalized objects **MUST NOT** contain extra information or metadata
 
-### canonicalization of Structured Data
+### Canonicalization of Structured Data
 
 Node elements of type "array" or "object" are normalized using their empty state.
 
@@ -101,33 +101,13 @@ Node elements of type "array" or "object" are normalized using their empty state
 
 ### Normalizaton of Primitive Types
 
-Node elements of type "string", "number", "null", or "boolean" **MUST** be normalized as their original value.
+Node elements with value of type "string", "number", "null", or "boolean" **MUST** be normalized as their original value.
 
-## Example
+# Canonical Formats
 
-The input JSON object:
+## Object Format
 
-```
-{
-  "hello": "world",
-  "foo": { "bar": true },
-  "knows": [ 42, null ]
-}
-```
-
-Can be normalized into:
-
-```
-{
-  "": {},
-  "/hello": "world",
-  "/foo": {},
-  "/foo/bar": true,
-  "/knows": [],
-  "/knows/0": 42,
-  "/knows/1": null
-}
-```
+## Array Format
 
 # Conformance
 
@@ -138,7 +118,157 @@ Repository
 
 {backmatter}
 
-# ECMAScript Sample canonicalization
+# Test Vectors
+
+## Primitive Types
+
+### Test Case: null value
+
+Input
+
+```json
+null
+```
+
+Output as object
+
+```json
+{
+  "": null
+}
+```
+
+Output as array
+
+```json
+[
+  { "": null }
+]
+```
+
+### Test Case: integer value
+
+Input:
+
+```json
+42
+```
+
+Output as object:
+
+```json
+{
+  "": 42
+}
+```
+
+Output as array:
+
+```json
+[
+  { "": 42 }
+]
+```
+
+### Test Case: string value
+
+Input:
+
+```json
+"foo"
+```
+
+Output as object:
+
+```json
+{
+  "": "foo"
+}
+```
+
+Output as array:
+
+```json
+[
+  { "": "foo" }
+]
+```
+
+### Test Case: boolean value
+
+Input:
+
+```json
+true
+```
+
+Output as object:
+
+```json
+{
+  "": true
+}
+```
+
+Output as array:
+
+```json
+[
+  { "": true }
+]
+```
+
+## Structure Types
+
+### Test Case: empty array
+
+Input:
+
+```json
+[]
+```
+
+Output as object:
+
+```json
+{
+  "": []
+}
+```
+
+Output as array:
+
+```json
+[
+  { "": [] }
+]
+```
+
+### Test Case: empty object
+
+Input:
+
+```json
+{}
+```
+
+Output as object:
+
+```json
+{
+  "": {}
+}
+```
+
+Output as array:
+
+```json
+[
+  { "": {} }
+]
+```
+
+# ECMAScript Sample Canonicalization
 
 Below is an example function of JSON canonicalization for usage with ECMAScript-based [@!ECMA-262] systems:
 
@@ -183,7 +313,7 @@ const escape = function (item) {
 
 # Development Portal
 
-This specification is currently developed at https://github.com/trinsic-id/json-ptr-n11n-spec
+This specification is currently developed at https://github.com/trinsic-id/jpc-spec
 
 <reference anchor="ECMA-262" target="https://www.ecma-international.org/ecma-262/10.0/index.html">
   <front>
