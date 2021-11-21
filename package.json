@@ -1,0 +1,23 @@
+{
+  "name": "jpc-spec",
+  "version": "1.0.0",
+  "description": "Specification for JSON Pointer Canonicalization scheme",
+  "scripts": {
+    "prepare": "docker build -t markdown2rfc .",
+    "build": "npm run build:markdown2rfc && npm run rename && npm run remove",
+    "build:markdown2rfc": "docker run -v `pwd`:/data markdown2rfc spec.md",
+    "rename": "mv draft-tmarkovski-jpc-latest.html index.html",
+    "remove": "rm draft-tmarkovski-jpc-latest.xml",
+    "preview": "npx static-server -o"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trinsic-id/jpc-spec.git"
+  },
+  "author": "Tomislav Markovski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trinsic-id/jpc-spec/issues"
+  },
+  "homepage": "https://github.com/trinsic-id/jpc-spec#readme"
+}

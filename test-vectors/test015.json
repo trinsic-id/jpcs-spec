@@ -1,0 +1,13 @@
+{
+  "$schema": "./schema.json",
+  "label": "pointer field names",
+  "input": {
+    "foo~": "bar",
+    "/baz": true
+  },
+  "expected": {
+    "": {},
+    "/foo~0": "bar",
+    "/~1baz": true
+  }
+}

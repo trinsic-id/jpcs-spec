@@ -1,0 +1,13 @@
+{
+  "$schema": "./schema.json",
+  "label": "object multiple children",
+  "input": {
+    "foo": "bar",
+    "baz": null
+  },
+  "expected": {
+    "": {},
+    "/foo": "bar",
+    "/baz": null
+  }
+}

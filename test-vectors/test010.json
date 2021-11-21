@@ -1,0 +1,14 @@
+{
+  "$schema": "./schema.json",
+  "label": "object nested",
+  "input": {
+    "foo": {
+      "bar": "baz"
+    }
+  },
+  "expected": {
+    "": {},
+    "/foo": {},
+    "/foo/bar": "baz"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "$schema": "./schema.json",
+  "label": "boolean value",
+  "input": true,
+  "expected": {
+    "": true
+  }
+}

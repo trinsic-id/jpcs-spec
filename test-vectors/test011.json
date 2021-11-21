@@ -1,0 +1,10 @@
+{
+  "$schema": "./schema.json",
+  "label": "array item same type",
+  "input": ["foo", "bar"],
+  "expected": {
+    "": [],
+    "/0": "foo",
+    "/1": "bar"
+  }
+}
